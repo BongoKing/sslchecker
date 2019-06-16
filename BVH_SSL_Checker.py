@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[ ]:
 
 
 # Extract Links from BVH Site
@@ -16,22 +16,47 @@ response = requests.get(bvh)
 if response.status_code == 200:
     
     soup = BeautifulSoup(response.text, "html.parser")
-
     
 links = []
-links_optimized = []
 
 for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
     links.append(link.get('href'))
+    
+for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
+    links.append(link.get('href'))
+    
+
+
+# In[ ]:
+
+
+# Clean extracted Links
+
+links_optimized = []
   
 for item in links:
         requests.get(item, verify=True)
-        item = item.lstrip('http://')
-        item = item.lstrip('www.')
-        item = item.rstrip('/')
-        if item not in links_optimized:
+        
+        if item.count('https')>0:
+            item = item[8:]
+            #item = item.lstrip('https://')
+        if item.count('http')>0:
+            item = item[7:]
+            #item = item.lstrip('http://')
+        if item.count('s://')>0:
+            item = item[4:]
+            #item = item.lstrip('s://')
+        if item.count('www.')>0:
+            item = item[4:]
+            #item = item.lstrip('www.')
+        if item.endswith("/"):
+            item = item.rstrip("/")
+       
+    
+        if item not in links_optimized and not item.count('bvh.org')>0 and not item.count('facebook')>0         and not item.count('instagram')>0 and not item.count('linkedin')>0 and not item.count('youtube')>0 and not item.count('xing')>0:
             links_optimized.append(item)
-    #print(item)
+            
+            #print(item)
     
 print(links_optimized)
 
@@ -39,7 +64,15 @@ print(links_optimized)
 # In[ ]:
 
 
-#SSL checker - Notebook Output
+# Count URLs
+
+print(len(links_optimized))
+
+
+# In[ ]:
+
+
+# SSL checker - Notebook Output
 
 def https_checkup(item):
         URL = 'https://' + item
@@ -57,10 +90,10 @@ for item in links_optimized:
         pass
 
 
-# In[2]:
+# In[ ]:
 
 
-#SSL checker - CSV Output
+# SSL checker - CSV Output
 import csv
 import datetime
 
@@ -92,7 +125,7 @@ with open("bvh_audit.csv","a") as f:
 f.close()
 
 
-# In[4]:
+# In[ ]:
 
 
 # Check single site  SSL Status
@@ -102,7 +135,7 @@ requests.get('https://hofer-boersenforum.de')
 # In[ ]:
 
 
-#Detailed Cert Analysis
+# Detailed Cert Analysis
 
 from urllib.request import Request, urlopen, ssl, socket
 from urllib.error import URLError, HTTPError
