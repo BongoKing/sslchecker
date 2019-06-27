@@ -39,25 +39,17 @@ for item in links:
         
         if item.count('https')>0:
             item = item[8:]
-            #item = item.lstrip('https://')
         if item.count('http')>0:
             item = item[7:]
-            #item = item.lstrip('http://')
-        if item.count('s://')>0:
-            item = item[4:]
-            #item = item.lstrip('s://')
         if item.count('www.')>0:
             item = item[4:]
-            #item = item.lstrip('www.')
         if item.endswith("/"):
             item = item.rstrip("/")
        
     
         if item not in links_optimized and not item.count('bvh.org')>0 and not item.count('facebook')>0         and not item.count('instagram')>0 and not item.count('linkedin')>0 and not item.count('youtube')>0 and not item.count('xing')>0:
             links_optimized.append(item)
-            
-            #print(item)
-    
+                
 print(links_optimized)
 
 
@@ -80,13 +72,13 @@ def https_checkup(item):
         if response.status_code == 200:
             print(item + " OK")
         else:
-            print(item + " SSL Error")
+            print(item + " SSL Inconsistency")
             
 for item in links_optimized:
     try:
         https_checkup(item)
     except:
-        print(item + " No SSL Cert found!")
+        print(item + " Error / No SSL Cert found!")
         pass
 
 
