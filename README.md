@@ -2,7 +2,14 @@
 Python Script to check the linked URLs of the BVH e.V. members
 
 
-Instruction:
+
+
+# Instruction:
+The URL under which the to be checked pages are listed is defined through:
+
+bvh = "https://www.bvh.org/mitgliedsvereine/"
+
+# Comment about the results:
 
 There are 3 different response options.
 
